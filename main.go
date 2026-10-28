@@ -39,10 +39,8 @@ func Insert(writer http.ResponseWriter, request *http.Request){
 	employee.Department = request.FormValue("department")
 
 	domains.InsertEmployee(employee)
-
-	employees := domains.GetEmployees()
-
-	template_html.ExecuteTemplate(writer, "Home.html", employees)
+	
+	http.Redirect(writer, request, "/", http.StatusFound);
 }
 
 func parseInt(value string) (int){
