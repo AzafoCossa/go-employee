@@ -51,7 +51,7 @@ func GetEmployees() []Employee{
 		employee.FirstName = firstName
 		employee.LastName = lastName
 		employee.Department = department
-		employee.Salary = salary
+		employee.Salary = salary / 100
 
 		employees = append(employees, employee)
 	}
@@ -59,4 +59,21 @@ func GetEmployees() []Employee{
 	defer database.Close()
 
 	return employees
+}
+
+func InsertEmployee(employee Employee){
+	var database *sql.DB
+	database = db.GetConnection()
+
+	var error error
+
+	var insert *sql.Stmt
+	insert, error = database.Prepare("INSERT INTO Employee(firstName, lastName, salary, department) VALUES(?,?,?,?)")
+	if error != nil{
+		panic(error.Error())
+	}
+
+	insert.Exec(employee.FirstName, employee.LastName, employee.Salary, employee.Department)
+
+	defer database.Close()
 }
