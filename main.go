@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
+
+	"azafocossa.com/employee/domains"
 )
 
 var template_html = template.Must(template.ParseGlob("views/*"))
@@ -18,7 +21,10 @@ func main(){
 }
 
 func Home(writer http.ResponseWriter, request *http.Request){
-	// employees []domains.Employee
+	var employees []domains.Employee
+	employees = domains.GetEmployees()
 
-	template_html.ExecuteTemplate(writer, "Home.html", nil)
+	log.Println(employees)
+
+	template_html.ExecuteTemplate(writer, "Home.html", employees)
 }
