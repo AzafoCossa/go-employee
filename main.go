@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"html/template"
-	"log"
 	"net/http"
+	"text/template"
 
 	"azafocossa.com/employee/domains"
 )
@@ -17,6 +16,7 @@ func main(){
 	fmt.Println("Server started at http://localhost:8000")
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/employees/insert", Insert)
+	http.HandleFunc("/employees/delete", DeleteHandler)
 
 	http.ListenAndServe(":8000", nil)
 }
@@ -24,8 +24,6 @@ func main(){
 func Home(writer http.ResponseWriter, request *http.Request){
 	var employees []domains.Employee
 	employees = domains.GetEmployees()
-
-	log.Println(employees)
 
 	template_html.ExecuteTemplate(writer, "Home.html", employees)
 }
@@ -41,6 +39,16 @@ func Insert(writer http.ResponseWriter, request *http.Request){
 	domains.InsertEmployee(employee)
 	
 	http.Redirect(writer, request, "/", http.StatusFound);
+}
+
+func DeleteHandler(writer http.ResponseWriter, request *http.Request){
+	var employeeId int
+	employeeId = parseInt(request.FormValue("id"))
+
+	employee := domains.GetEmployeeById(employeeId)
+	domains.DeleteEmployee(employee)
+
+	http.Redirect(writer, request, "/", http.StatusFound)
 }
 
 func parseInt(value string) (int){
