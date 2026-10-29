@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <a class="navbar-brand" href="#">Employee</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Início</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="card mx-auto mt-5">
+        <div class="card-header">Editar funcionário</div>
+        
+          <div class="card-body mx-4">
+            <form action="/employees/update">
+                <input type="hidden" name="employeeId" value="{{.Id}}" class="form-control" placeholder="Digite o primeiro nome">
+                <div class="row">
+                    <label for="firstName">Primeiro nome</label>
+                    <input type="text" name="firstName" value="{{.FirstName}}" class="form-control" placeholder="Digite o primeiro nome">
+                </div>
+
+                <div class="row mt-4">
+                    <label for="lastName">Ultimo nome</label>
+                    <input type="text" name="lastName" value="{{.LastName}}" class="form-control" placeholder="Digite o ultimo nome">
+                </div>
+
+                <div class="row mt-4">
+                    <label for="salary">Salario</label>
+                    <input type="text" name="salary" value="{{.Salary}}" class="form-control" placeholder="Digite o salario">
+                </div>
+
+                <div class="row mt-4">
+                    <label for="department">Departamento</label>
+                    <input type="text" name="department" value="{{.Department}}" class="form-control" placeholder="Digite o departamento">
+                </div>
+                
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+          </div>
+      </div>
+    </div>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

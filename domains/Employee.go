@@ -115,6 +115,20 @@ func InsertEmployee(employee Employee){
 	defer database.Close()
 }
 
+func UpdateEmployee(emplyee Employee){
+	database := db.GetConnection()
+
+	var update *sql.Stmt
+	update, error := database.Prepare("UPDATE Employee SET firstName = ?, lastName = ?, salary = ?, department = ? WHERE id = ?")
+	if error != nil{
+		panic(error.Error())
+	}
+
+	update.Exec(emplyee.FirstName, emplyee.LastName, emplyee.Salary, emplyee.Department, emplyee.Id)
+
+	defer database.Close()
+}
+
 func DeleteEmployee(employee Employee){
 	var database *sql.DB
 	database = db.GetConnection()

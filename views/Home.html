@@ -9,7 +9,7 @@
 </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand" href="#">Employee</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -64,14 +64,20 @@
                       <button type="button" class="btn btn-secondary">
                         Visualizar
                       </button>
-                      <button
+                      <a href="/employees/edit?id={{.Id}}"
+                        type="button"
+                        class="btn btn-warning"
+                      >
+                        Editar
+                    </a>
+                      <!-- <button
                         type="button"
                         class="btn btn-warning"
                         data-bs-toggle="modal"
                         data-bs-target="#editModal"
                       >
                         Editar
-                      </button>
+                      </button> -->
                       <a href="/employees/delete?id={{.Id}}" class="btn btn-danger">
                         Remover
                       </a>

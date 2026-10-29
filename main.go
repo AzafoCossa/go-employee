@@ -16,6 +16,8 @@ func main(){
 	fmt.Println("Server started at http://localhost:8000")
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/employees/insert", Insert)
+	http.HandleFunc("/employees/update", UpdateHandler)
+	http.HandleFunc("/employees/edit", EditHandler)
 	http.HandleFunc("/employees/delete", DeleteHandler)
 
 	http.ListenAndServe(":8000", nil)
@@ -26,6 +28,14 @@ func Home(writer http.ResponseWriter, request *http.Request){
 	employees = domains.GetEmployees()
 
 	template_html.ExecuteTemplate(writer, "Home.html", employees)
+}
+
+func EditHandler(writer http.ResponseWriter, request *http.Request){
+	employeeId := request.FormValue("id");
+	employee := domains.GetEmployeeById(parseInt(employeeId))
+
+
+	template_html.ExecuteTemplate(writer, "EditEmployee.html", employee)
 }
 
 func Insert(writer http.ResponseWriter, request *http.Request){
@@ -39,6 +49,20 @@ func Insert(writer http.ResponseWriter, request *http.Request){
 	domains.InsertEmployee(employee)
 	
 	http.Redirect(writer, request, "/", http.StatusFound);
+}
+
+func UpdateHandler(writer http.ResponseWriter, request *http.Request){
+	var employee domains.Employee
+
+	employee.Id = parseInt(request.FormValue("employeeId"))
+	employee.Department = request.FormValue("department")
+	employee.FirstName = request.FormValue("firstName")
+	employee.LastName = request.FormValue("lastName")
+	employee.Salary = parseInt(request.FormValue("salary")) * 100
+
+	domains.UpdateEmployee(employee)
+
+	http.Redirect(writer, request, "/", http.StatusFound)
 }
 
 func DeleteHandler(writer http.ResponseWriter, request *http.Request){
