@@ -61,6 +61,43 @@ func GetEmployees() []Employee{
 	return employees
 }
 
+func GetEmployeeById(employeeId int) Employee{
+	var database *sql.DB
+	database = db.GetConnection()
+
+	var rows *sql.Rows
+	rows, error := database.Query("SELECT * FROM Employee WHERE id = ?", employeeId)
+
+	if(error != nil){
+		panic(error.Error())
+	}
+
+	employee := Employee{}
+	for rows.Next(){
+		var id int
+		var firstName string
+		var lastName string
+		var salary int
+		var department string
+
+		error = rows.Scan(&id, &firstName, &lastName, &salary, &department)
+
+		if(error != nil){
+			panic(error.Error())
+		}
+
+		employee.Department = department
+		employee.FirstName = firstName
+		employee.LastName = lastName
+		employee.Salary = salary/100
+		employee.Id = id
+	}
+
+	defer database.Close()
+
+	return employee
+}
+
 func InsertEmployee(employee Employee){
 	var database *sql.DB
 	database = db.GetConnection()
