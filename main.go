@@ -23,6 +23,7 @@ func main(){
 	router.HandleFunc("/employees/update", UpdateHandler)
 	router.HandleFunc("/employees/edit/{id}", EditHandler)
 	router.HandleFunc("/employees/delete", DeleteHandler)
+	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 	http.Handle("/", router)
 	http.ListenAndServe(":8000", nil)
 }
@@ -77,6 +78,10 @@ func DeleteHandler(writer http.ResponseWriter, request *http.Request){
 	domains.Employee.DeleteEmployee(employee)
 
 	http.Redirect(writer, request, "/", http.StatusFound)
+}
+
+func NotFoundHandler(writer http.ResponseWriter, request *http.Request){
+	template_html.ExecuteTemplate(writer, "404.html", nil)
 }
 
 func parseInt(value string) (int){
