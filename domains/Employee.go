@@ -14,7 +14,7 @@ type Employee struct{
 	Department string
 }
 
-func GetEmployees() []Employee{
+func (employee Employee) GetEmployees() []Employee{
 	var database *sql.DB
 	database = db.GetConnection()
 
@@ -28,7 +28,6 @@ func GetEmployees() []Employee{
 		panic(error.Error())
 	}
 
-	var employee Employee
 	employee = Employee{}
 
 	var employees []Employee
@@ -61,7 +60,7 @@ func GetEmployees() []Employee{
 	return employees
 }
 
-func GetEmployeeById(employeeId int) Employee{
+func (employee Employee)GetEmployeeById(employeeId int) Employee{
 	var database *sql.DB
 	database = db.GetConnection()
 
@@ -72,7 +71,6 @@ func GetEmployeeById(employeeId int) Employee{
 		panic(error.Error())
 	}
 
-	employee := Employee{}
 	for rows.Next(){
 		var id int
 		var firstName string
@@ -98,7 +96,7 @@ func GetEmployeeById(employeeId int) Employee{
 	return employee
 }
 
-func InsertEmployee(employee Employee){
+func (employee Employee) InsertEmployee(){
 	var database *sql.DB
 	database = db.GetConnection()
 
@@ -115,7 +113,7 @@ func InsertEmployee(employee Employee){
 	defer database.Close()
 }
 
-func UpdateEmployee(emplyee Employee){
+func (employee Employee) UpdateEmployee(){
 	database := db.GetConnection()
 
 	var update *sql.Stmt
@@ -124,12 +122,12 @@ func UpdateEmployee(emplyee Employee){
 		panic(error.Error())
 	}
 
-	update.Exec(emplyee.FirstName, emplyee.LastName, emplyee.Salary, emplyee.Department, emplyee.Id)
+	update.Exec(employee.FirstName, employee.LastName, employee.Salary, employee.Department, employee.Id)
 
 	defer database.Close()
 }
 
-func DeleteEmployee(employee Employee){
+func (employee Employee) DeleteEmployee(){
 	var database *sql.DB
 	database = db.GetConnection()
 	

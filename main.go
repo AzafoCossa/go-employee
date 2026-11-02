@@ -25,14 +25,14 @@ func main(){
 
 func Home(writer http.ResponseWriter, request *http.Request){
 	var employees []domains.Employee
-	employees = domains.GetEmployees()
+	employees = domains.Employee{}.GetEmployees()
 
 	template_html.ExecuteTemplate(writer, "Home.html", employees)
 }
 
 func EditHandler(writer http.ResponseWriter, request *http.Request){
 	employeeId := request.FormValue("id");
-	employee := domains.GetEmployeeById(parseInt(employeeId))
+	employee := domains.Employee{}.GetEmployeeById(parseInt(employeeId))
 
 
 	template_html.ExecuteTemplate(writer, "EditEmployee.html", employee)
@@ -46,7 +46,7 @@ func Insert(writer http.ResponseWriter, request *http.Request){
 	employee.Salary = parseInt(request.FormValue("salary")) * 100
 	employee.Department = request.FormValue("department")
 
-	domains.InsertEmployee(employee)
+	domains.Employee.InsertEmployee(employee)
 	
 	http.Redirect(writer, request, "/", http.StatusFound);
 }
@@ -60,7 +60,7 @@ func UpdateHandler(writer http.ResponseWriter, request *http.Request){
 	employee.LastName = request.FormValue("lastName")
 	employee.Salary = parseInt(request.FormValue("salary")) * 100
 
-	domains.UpdateEmployee(employee)
+	domains.Employee.UpdateEmployee(employee)
 
 	http.Redirect(writer, request, "/", http.StatusFound)
 }
@@ -69,8 +69,8 @@ func DeleteHandler(writer http.ResponseWriter, request *http.Request){
 	var employeeId int
 	employeeId = parseInt(request.FormValue("id"))
 
-	employee := domains.GetEmployeeById(employeeId)
-	domains.DeleteEmployee(employee)
+	employee := domains.Employee{}.GetEmployeeById(employeeId)
+	domains.Employee.DeleteEmployee(employee)
 
 	http.Redirect(writer, request, "/", http.StatusFound)
 }
