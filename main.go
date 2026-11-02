@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	"azafocossa.com/employee/domains"
+	"github.com/gorilla/mux"
 )
 
 var template_html = template.Must(template.ParseGlob("views/*"))
@@ -13,17 +14,20 @@ var template_html = template.Must(template.ParseGlob("views/*"))
 func main(){
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	fmt.Println("Server started at http://localhost:8000")
-	http.HandleFunc("/", Home)
-	http.HandleFunc("/employees/insert", Insert)
-	http.HandleFunc("/employees/update", UpdateHandler)
-	http.HandleFunc("/employees/edit", EditHandler)
-	http.HandleFunc("/employees/delete", DeleteHandler)
 
+	router := mux.NewRouter()
+	fmt.Println("Server started at http://localhost:8000")
+
+	router.HandleFunc("/", HomeHandler)
+	router.HandleFunc("/employees/insert", InsertHandler)
+	router.HandleFunc("/employees/update", UpdateHandler)
+	router.HandleFunc("/employees/edit/{id}", EditHandler)
+	router.HandleFunc("/employees/delete", DeleteHandler)
+	http.Handle("/", router)
 	http.ListenAndServe(":8000", nil)
 }
 
-func Home(writer http.ResponseWriter, request *http.Request){
+func HomeHandler(writer http.ResponseWriter, request *http.Request){
 	var employees []domains.Employee
 	employees = domains.Employee{}.GetEmployees()
 
@@ -31,14 +35,14 @@ func Home(writer http.ResponseWriter, request *http.Request){
 }
 
 func EditHandler(writer http.ResponseWriter, request *http.Request){
-	employeeId := request.FormValue("id");
+	vars := mux.Vars(request)
+	employeeId := vars["id"]
 	employee := domains.Employee{}.GetEmployeeById(parseInt(employeeId))
-
 
 	template_html.ExecuteTemplate(writer, "EditEmployee.html", employee)
 }
 
-func Insert(writer http.ResponseWriter, request *http.Request){
+func InsertHandler(writer http.ResponseWriter, request *http.Request){
 	var employee domains.Employee
 
 	employee.FirstName = request.FormValue("firstName")
