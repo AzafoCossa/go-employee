@@ -10,11 +10,11 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
-        <a class="navbar-brand" href="#">Employee</a>
+        <a class="navbar-brand" href="/">Employee</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Início</a>
+              <a class="nav-link active" aria-current="page" href="/">Início</a>
             </li>
           </ul>
         </div>
@@ -26,26 +26,26 @@
         <div class="card-header">Editar funcionário</div>
         
           <div class="card-body mx-4">
-            <form action="/employees/update">
-                <input type="hidden" name="employeeId" value="{{.Id}}" class="form-control" placeholder="Digite o primeiro nome">
+            <form action="/employees/update" method="POST">
+                <input type="hidden" name="employeeId" value="{{.employee.Id}}" class="form-control" placeholder="Digite o primeiro nome">
                 <div class="row">
                     <label for="firstName">Primeiro nome</label>
-                    <input type="text" name="firstName" value="{{.FirstName}}" class="form-control" placeholder="Digite o primeiro nome">
+                    <input type="text" name="firstName" value="{{.employee.FirstName}}" class="form-control" placeholder="Digite o primeiro nome">
                 </div>
 
                 <div class="row mt-4">
                     <label for="lastName">Ultimo nome</label>
-                    <input type="text" name="lastName" value="{{.LastName}}" class="form-control" placeholder="Digite o ultimo nome">
+                    <input type="text" name="lastName" value="{{.employee.LastName}}" class="form-control" placeholder="Digite o ultimo nome">
                 </div>
 
                 <div class="row mt-4">
                     <label for="salary">Salario</label>
-                    <input type="text" name="salary" value="{{.Salary}}" class="form-control" placeholder="Digite o salario">
+                    <input type="text" name="salary" value="{{.employee.Salary}}" class="form-control" placeholder="Digite o salario">
                 </div>
 
                 <div class="row mt-4">
                     <label for="department">Departamento</label>
-                    <input type="text" name="department" value="{{.Department}}" class="form-control" placeholder="Digite o departamento">
+                    <input type="text" name="department" value="{{.employee.Department}}" class="form-control" placeholder="Digite o departamento">
                 </div>
                 
 

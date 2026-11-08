@@ -6,82 +6,82 @@ import (
 	"text/template"
 
 	"azafocossa.com/employee/domains"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 var template_html = template.Must(template.ParseGlob("views/*"))
 
 func main(){
-	fs := http.FileServer(http.Dir("assets"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-
-	router := mux.NewRouter()
-	fmt.Println("Server started at http://localhost:8000")
-
-	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/employees/insert", InsertHandler)
-	router.HandleFunc("/employees/update", UpdateHandler)
-	router.HandleFunc("/employees/edit/{id}", EditHandler)
-	router.HandleFunc("/employees/delete", DeleteHandler)
-	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
-	http.Handle("/", router)
-	http.ListenAndServe(":8000", nil)
+	router := gin.Default()
+	router.Static("/static/", "./assets")
+	router.LoadHTMLGlob("views/*")
+	router.GET("/", HomeHandler)
+	router.GET("/employees/", HomeHandler)
+	router.POST("/employees/insert/", InsertHandler)
+	router.POST("/employees/update/", UpdateHandler)
+	router.GET("/employees/edit/:id", EditHandler)
+	router.GET("/employees/delete/", DeleteHandler)
+	router.NoRoute(NotFoundHandler)
+	
+	router.Run(":8000")
 }
 
-func HomeHandler(writer http.ResponseWriter, request *http.Request){
-	var employees []domains.Employee
-	employees = domains.Employee{}.GetEmployees()
+func HomeHandler(c *gin.Context){
+	employees := domains.Employee{}.GetEmployees()
 
-	template_html.ExecuteTemplate(writer, "Home.html", employees)
+	c.HTML(http.StatusOK, "Home.html", gin.H{
+		"employees" : employees,
+	})
 }
 
-func EditHandler(writer http.ResponseWriter, request *http.Request){
-	vars := mux.Vars(request)
-	employeeId := vars["id"]
+func EditHandler(c *gin.Context){
+	employeeId := c.Param("id")
 	employee := domains.Employee{}.GetEmployeeById(parseInt(employeeId))
 
-	template_html.ExecuteTemplate(writer, "EditEmployee.html", employee)
+	c.HTML(http.StatusOK, "EditEmployee.html", gin.H{
+		"employee": employee,
+	})
 }
 
-func InsertHandler(writer http.ResponseWriter, request *http.Request){
+func InsertHandler(c *gin.Context){
 	var employee domains.Employee
 
-	employee.FirstName = request.FormValue("firstName")
-	employee.LastName = request.FormValue("lastName")
-	employee.Salary = parseInt(request.FormValue("salary")) * 100
-	employee.Department = request.FormValue("department")
+	employee.FirstName = c.PostForm("firstName")
+	employee.LastName = c.PostForm("lastName")
+	employee.Salary = parseInt(c.PostForm("salary")) * 100
+	employee.Department = c.PostForm("department")
 
 	domains.Employee.InsertEmployee(employee)
 	
-	http.Redirect(writer, request, "/", http.StatusFound);
+	c.Redirect(http.StatusFound, "/")
 }
 
-func UpdateHandler(writer http.ResponseWriter, request *http.Request){
+func UpdateHandler(c *gin.Context){
 	var employee domains.Employee
 
-	employee.Id = parseInt(request.FormValue("employeeId"))
-	employee.Department = request.FormValue("department")
-	employee.FirstName = request.FormValue("firstName")
-	employee.LastName = request.FormValue("lastName")
-	employee.Salary = parseInt(request.FormValue("salary")) * 100
+	employee.Id = parseInt(c.PostForm("employeeId"))
+	employee.Department = c.PostForm("department")
+	employee.FirstName = c.PostForm("firstName")
+	employee.LastName = c.PostForm("lastName")
+	employee.Salary = parseInt(c.PostForm("salary")) * 100
 
 	domains.Employee.UpdateEmployee(employee)
 
-	http.Redirect(writer, request, "/", http.StatusFound)
+	c.Redirect(http.StatusFound, "/")
 }
 
-func DeleteHandler(writer http.ResponseWriter, request *http.Request){
+func DeleteHandler(c *gin.Context){
 	var employeeId int
-	employeeId = parseInt(request.FormValue("id"))
+	employeeId = parseInt(c.Param("id"))
 
 	employee := domains.Employee{}.GetEmployeeById(employeeId)
 	domains.Employee.DeleteEmployee(employee)
 
-	http.Redirect(writer, request, "/", http.StatusFound)
+	c.Redirect(http.StatusFound, "/")
 }
 
-func NotFoundHandler(writer http.ResponseWriter, request *http.Request){
-	template_html.ExecuteTemplate(writer, "404.html", nil)
+func NotFoundHandler(c *gin.Context){
+	c.HTML(http.StatusNotFound, "404.html", nil)
 }
 
 func parseInt(value string) (int){

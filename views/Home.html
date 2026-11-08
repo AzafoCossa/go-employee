@@ -10,11 +10,11 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
-        <a class="navbar-brand" href="#">Employee</a>
+        <a class="navbar-brand" href="/">Employee</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Início</a>
+              <a class="nav-link active" aria-current="page" href="/">Início</a>
             </li>
           </ul>
         </div>
@@ -36,7 +36,7 @@
             </button>
           </div>
           <table class="table table-striped">
-            {{if .}}
+            {{if .employees}}
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -48,7 +48,7 @@
                 </tr>
               </thead>
               <tbody>
-                {{range .}}
+                {{range .employees}}
                 <tr>
                   <th scope="row">{{.Id}}</th>
                   <td>{{.FirstName}}</td>
@@ -115,7 +115,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <form action="/employees/insert">
+          <form action="/employees/insert" method="POST">
             <div class="modal-body mx-2">
               <div class="row">
                 <input type="text" name="firstName" class="form-control" placeholder="Digite o primeiro nome">
