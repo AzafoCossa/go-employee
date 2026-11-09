@@ -61,10 +61,10 @@
                       role="group"
                       aria-label="Action buttons"
                     >
-                      <button type="button" class="btn btn-secondary">
+                      <a href="/employees/view?id={{.Id}}" class="btn btn-secondary">
                         Visualizar
-                      </button>
-                      <a href="/employees/edit/{{.Id}}"
+                      </a>
+                      <a href="/employees/edit?id={{.Id}}"
                         type="button"
                         class="btn btn-warning"
                       >

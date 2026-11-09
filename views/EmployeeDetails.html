@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <a class="navbar-brand" href="/">Employee</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Início</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="card mx-auto mt-5">
+        <div class="card-header">Detalhes do funcionário</div>
+        
+          <div class="card-body mx-4">
+            <h1>{{.employee.FirstName}} {{.employee.LastName}}</h1>
+            <p><strong>Departamento: </strong>{{.employee.Department}}</p>
+            <p><strong>salario: </strong>{{.employee.Salary}}</p>
+
+            <div>
+              <a href="/" class="btn btn-secondary">Voltar</a>
+              <a href="/employees/edit?id={{.employee.Id}}" class="btn btn-warning mx-2">Editar</a>
+              <a href="/employees/delete?id={{.employee.Id}}" class="btn btn-danger">Remover</a>
+            </div>
+          </div>
+      </div>
+    </div>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
